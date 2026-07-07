@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PBS 컬러강점 어린이 · 결과 입력</title>
+<style>
+:root{
+  --red:#FF3366;--red-bg:#FFF0F4;--yellow:#F5A623;--yellow-bg:#FFF8E6;
+  --green:#00A878;--green-bg:#E6F8F1;--blue:#0077B6;--blue-bg:#E6F4FB;
+  --purple:#9B59B6;--purple-bg:#F5EEFA;
+  --ink:#2A2540;--soft:#6B6584;--muted:#9A94AE;--line:#ECE8F5;
+  --bg:#FBFAFE;--surface:#fff;--r:18px;
+  --brand:linear-gradient(135deg,#7C4DBE,#B36BE0);
+  --font:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:580px;margin:0 auto;padding:0 16px 60px}
+.top{background:var(--brand);color:#fff;border-radius:0 0 26px 26px;padding:26px 20px 30px;text-align:center}
+.top .rainbow{font-size:40px;line-height:1}
+.top h1{font-size:22px;font-weight:900;margin-top:6px;letter-spacing:-.02em}
+.top p{font-size:13.5px;opacity:.95;margin-top:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;margin:14px 0;box-shadow:0 4px 14px rgba(80,60,140,.06)}
+.card h2{font-size:19px;font-weight:900;margin-bottom:6px}
+.card .sub{color:var(--soft);font-size:14px;margin-bottom:14px}
+.screen{display:none}.screen.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.score-row{display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:14px;margin-bottom:10px}
+.score-row .emo{font-size:34px;line-height:1;width:44px;text-align:center;flex-shrink:0}
+.score-row .lab{flex:1}.score-row .lab b{display:block;font-size:16px;font-weight:900}
+.score-row .lab span{font-size:12px;color:var(--soft);font-weight:700}
+.score-row input{width:78px;height:52px;text-align:center;font-size:22px;font-weight:900;font-family:var(--font);border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.score-row input:focus{outline:none}
+.score-row[data-c="RED"]{background:var(--red-bg)} .score-row[data-c="RED"] input:focus{border-color:var(--red)} .score-row[data-c="RED"] .lab b{color:var(--red)}
+.score-row[data-c="YELLOW"]{background:var(--yellow-bg)} .score-row[data-c="YELLOW"] input:focus{border-color:var(--yellow)} .score-row[data-c="YELLOW"] .lab b{color:#C9821A}
+.score-row[data-c="GREEN"]{background:var(--green-bg)} .score-row[data-c="GREEN"] input:focus{border-color:var(--green)} .score-row[data-c="GREEN"] .lab b{color:var(--green)}
+.score-row[data-c="BLUE"]{background:var(--blue-bg)} .score-row[data-c="BLUE"] input:focus{border-color:var(--blue)} .score-row[data-c="BLUE"] .lab b{color:var(--blue)}
+.score-row[data-c="PURPLE"]{background:var(--purple-bg)} .score-row[data-c="PURPLE"] input:focus{border-color:var(--purple)} .score-row[data-c="PURPLE"] .lab b{color:var(--purple)}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;margin:4px 0 12px}
+.btn{display:block;width:100%;border:none;border-radius:999px;padding:17px;font-size:17px;font-weight:900;font-family:var(--font);cursor:pointer;color:#fff;background:var(--brand);box-shadow:0 8px 20px rgba(124,77,190,.32);transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:#fff;color:#7C4DBE;border:2px solid #E4D5F3;box-shadow:none}
+.remain{text-align:center;font-size:13px;color:var(--soft);font-weight:700;margin-top:10px}
+.hero{border-radius:22px;padding:30px 20px;text-align:center;color:#fff}
+.hero .emo{font-size:76px;line-height:1}
+.hero .kicker{font-size:13px;font-weight:800;opacity:.9;letter-spacing:.08em;margin-top:6px}
+.hero h2{font-size:28px;font-weight:900;margin:2px 0 4px}
+.hero .head{font-size:15px;font-weight:700;opacity:.97;max-width:430px;margin:8px auto 0}
+.bar{display:flex;align-items:center;gap:10px;margin:9px 0}
+.bar .bemo{font-size:22px;width:30px;text-align:center}
+.bar .bt{flex:1}
+.bar .bt .n{display:flex;justify-content:space-between;font-size:12.5px;font-weight:800;margin-bottom:3px}
+.bar .track{height:12px;background:#F0ECF8;border-radius:999px;overflow:hidden}
+.bar .fill{height:100%;border-radius:999px}
+.sec{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sec:first-child{border-top:none;padding-top:0;margin-top:0}
+.sec h3{font-size:16.5px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.sec p{font-size:14.5px;color:#3a3550;line-height:1.85;margin-bottom:8px}
+.sec p:last-child{margin-bottom:0}
+.sec ul{list-style:none}
+.sec li{font-size:14.5px;color:#3a3550;padding:5px 0 5px 24px;position:relative;line-height:1.65}
+.sec li::before{content:"⭐";position:absolute;left:0;font-size:13px;top:6px}
+.tip{background:#EFFAF4;border-left:3px solid var(--green);border-radius:8px;padding:10px 13px;font-size:13.8px;color:#2f5f4c;line-height:1.75}
+.care{background:#FFF4F6;border-left:3px solid var(--red);border-radius:8px;padding:10px 13px;font-size:13.8px;color:#7a3a48;line-height:1.75}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chips span{background:#F4F0FB;color:#6A4A9A;font-size:13.5px;font-weight:800;padding:8px 14px;border-radius:999px}
+.chips.job span{background:#EAF6FF;color:#0F5E8C}
+.models{font-size:13.5px;color:var(--soft);font-weight:700;margin-top:10px}.models b{color:var(--ink)}
+.affirm{background:var(--purple-bg);border-radius:14px;padding:16px;text-align:center;font-size:16.5px;font-weight:800;color:#6A4A9A;margin-top:16px}
+.guide{background:#FFF8E6;border:1px dashed #F0C86A;border-radius:14px;padding:15px 16px;margin-top:16px}
+.guide b{color:#B5820F}.guide p{font-size:14px;color:#5b5330;line-height:1.8;margin-top:4px}
+.basis{background:#F4F2FA;border-radius:12px;padding:13px 15px;margin-top:12px;font-size:12.8px;color:var(--soft);line-height:1.75}.basis b{color:#5A5470}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:14.5px;font-weight:800;margin-bottom:7px}
+.field textarea{width:100%;min-height:96px;font-family:var(--font);font-size:15px;padding:12px;border:2px solid var(--line);border-radius:12px;resize:vertical}
+.field textarea:focus{outline:none;border-color:#B36BE0}
+.stars{font-size:38px;letter-spacing:6px;cursor:pointer;user-select:none;text-align:center}
+.stars span{color:#E3DFF0}
+#imgprev img{max-width:100%;max-height:220px;border-radius:12px;margin-top:8px;border:1px solid var(--line)}
+.more{background:linear-gradient(135deg,#2C1338,#7030A0);color:#fff;border-radius:20px;padding:24px 20px;margin-top:16px;text-align:center}
+.more .k{font-size:12px;font-weight:800;opacity:.85;letter-spacing:.15em;margin-bottom:8px}
+.more h3{font-size:19px;font-weight:900;margin-bottom:6px}
+.more p{font-size:13.5px;opacity:.95;line-height:1.65;margin-bottom:14px}
+.more a{display:block;text-decoration:none;font-weight:900;font-size:14.5px;padding:14px;border-radius:12px;margin-top:9px}
+.more a.p{background:#FFD56B;color:#4A1F6B}.more a.o{background:transparent;color:#fff;border:1.6px solid rgba(255,255,255,.55)}
+.foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#2A2540;color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.toast.on{opacity:1}
+.print-only{display:none}
+@media print{ body{background:#fff}.no-print{display:none!important}.print-only{display:block!important}
+  .wrap{max-width:100%;padding:0}.card{box-shadow:none;border:1px solid #e5e0f0;break-inside:avoid;margin:6px 0}
+  .hero,.bar .fill,.chips span,.more,.affirm,.guide,.tip,.care{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{size:A4;margin:12mm} }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="rainbow">🌈</div>
+  <h1>나의 컬러강점 결과 보기</h1>
+  <p>종이 진단지의 <b>색깔별 점수</b>를 넣으면<br>나의 컬러 친구와 자세한 설명이 나와요!</p>
+</div>
+<div class="wrap">
+  <section id="s-input" class="screen active no-print">
+    <div class="card">
+      <h2>✏️ 색깔별 점수를 넣어봐요</h2>
+      <p class="sub">종이 진단지에서 색깔마다 더한 점수(보통 5~25점)를 그대로 적어요. 하나 넣으면 자동으로 다음 칸으로 넘어가요.</p>
+      <div id="score-list"></div>
+      <div class="remain" id="remain">5개 색깔 점수를 모두 넣어주세요</div>
+    </div>
+    <button class="btn" onclick="showResult()">🎉 결과 보기</button>
+    <p class="hint">정답은 없어요. 종이에 적은 점수를 그대로 넣으면 돼요 😊</p>
+  </section>
+  <section id="s-result" class="screen"></section>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const ORDER=['RED','YELLOW','GREEN','BLUE','PURPLE'];
+const CHILD={
+  RED:{emo:'🦁',animal:'용감한 사자',color:'빨강',hex:'#FF3366',role:'씩씩한 추진',
+    head:'새로운 일에 가장 먼저 뛰어드는 용감한 대장! 도전과 리더십의 에너지를 타고났어요.',
+    strengths:['하고 싶은 일을 망설이지 않고 바로 시작하는 실행력이 있어요','어려운 일도 포기하지 않고 끝까지 도전해요','친구들을 이끌고 결정을 내리는 리더의 힘이 있어요','목표를 향해 힘차게 나아가는 에너지가 넘쳐요','낯설고 새로운 일도 두려워하지 않고 먼저 나서요','경쟁이나 어려움을 만나면 오히려 더 힘이 솟아요'],
+    interests:['축구·태권도 같은 운동','반장·모둠장 리더 역할','도전 대회·미션','목표 세우고 이뤄가기','캠핑·모험·탐험 놀이','발표·토론에서 앞장서기'],
+    motiv:'새로운 도전을 성공했을 때, 남들이 어려워하는 일을 해냈을 때, 팀을 이끌어 이겼을 때 가장 신나고 힘이 솟아요. "네가 해냈어!"라는 말을 들으면 다음 도전도 겁내지 않고 뛰어들어요.',
+    study:'가만히 앉아 외우기보다 몸을 움직이며 직접 해보는 활동형 학습이 잘 맞아요(가드너 신체·운동 지능). 공부를 "오늘의 도전 미션"처럼 목표와 시간을 정해 게임하듯 하면 집중이 확 올라가요.',
+    studyTip:'집중 팁: 25분 몰입 + 5분 휴식처럼 짧고 강하게 끊어서 하고, 끝낼 때마다 "미션 클리어!"라고 표시해 주세요. 타이머·점수 같은 도전 요소를 넣으면 더 몰입해요.',
+    friend:'친구들에게 먼저 다가가 놀이를 이끄는 리더예요. 내 뜻대로만 하기보다 "너는 어때?" 하고 친구 의견을 끝까지 들어주면 모두가 따르는 진짜 대장이 돼요.',
+    care:'조심할 점: 급하게 말하거나 이기려는 마음이 세지면 친구가 서운할 수 있어요. 한 박자 쉬고 부드럽게 말하는 연습을 해봐요.',
+    grow:'급한 마음에 실수하거나 지는 걸 힘들어할 때가 있어요. 잠깐 멈춰 생각하기, "지는 것도 배움"이라는 마음을 익히면 강점이 두 배로 단단해져요. 예를 들어 게임에서 졌을 때 "다음엔 이렇게 해볼래" 하고 방법을 찾으면 진짜 강한 사람이 돼요.',
+    careerWhy:'앞장서서 이끌고 도전하는 걸 좋아해서, 사람과 상황을 이끌고 목표를 이루는 직업에서 빛나요. 책임감 있게 결정하고 위기에도 앞장서는 힘이 리더의 자질이에요.',
+    jobs:['운동선수','팀 리더·CEO','경찰·소방관·군인','탐험가','창업가','스포츠 감독','응급구조사'],
+    models:'이순신 장군, 도전하는 운동선수, 극지 탐험가',
+    schoolTip:'학교에서 모둠장·1인 1역할을 맡아 책임을 다해보고, "순서 기다리기·친구 먼저 배려하기"를 이번 학기 목표로 삼으면 리더십이 더 멋지게 자라요.',
+    guide:'"네가 대장이야!" 같은 역할과 도전 미션을 주면 신나게 몰입해요. 결과보다 "시도한 용기"를 칭찬하고, 기다리기·친구 배려·감정 조절을 함께 알려주면 리더십이 완성됩니다. 넘치는 에너지는 운동·리더 활동으로 건강하게 풀어주세요.',
+    basis:'DISC의 주도형(D)·칼 융의 외향적 사고와 연결돼요. 도전을 즐기는 성취 동기가 강점의 뿌리입니다.',
+    cheer:'나는 용감하게 도전하는 멋진 사자예요! 🦁'},
+  YELLOW:{emo:'🐤',animal:'명랑한 병아리',color:'노랑',hex:'#F5A623',role:'즐거운 친구',
+    head:'어디서나 환하게 빛나는 즐거운 친구! 사람과 함께할 때 에너지가 폭발해요.',
+    strengths:['밝은 에너지로 주변을 행복하게 만들어요','처음 만난 친구와도 금방 친해져요','재미있는 아이디어와 표현이 톡톡 나와요','발표·무대에서 떨려도 신나게 해내요','분위기를 밝게 바꾸는 힘이 있어요','칭찬과 응원으로 친구에게 힘을 줘요'],
+    interests:['발표·역할극·연극','노래·춤·방송 놀이','친구들과 팀 활동·동아리','새로운 사람 만나기','파티·행사 꾸미기','반 이벤트 기획하기'],
+    motiv:'친구가 나를 보고 활짝 웃을 때, 사람들 앞에서 박수받을 때, 다 같이 신나게 어울릴 때 가장 행복하고 힘이 나요. 인정과 칭찬을 받으면 더 열심히 하고 싶어져요.',
+    study:'혼자 조용히보다 친구와 이야기하며 배우는 함께 공부가 잘 맞아요(가드너 대인 지능, 비고츠키 사회적 학습). 서로 문제를 내고 설명해주는 짝 공부를 하면 즐겁게 오래 집중해요.',
+    studyTip:'집중 팁: 스터디 짝꿍을 정하고, 오늘 배운 걸 다른 사람에게 설명해보게 하면 이해가 확 깊어져요. 작은 목표를 이룰 때마다 스티커·칭찬 같은 즐거운 보상을 주면 좋아요.',
+    friend:'모두와 잘 어울리는 인기쟁이예요. 조용한 친구에게도 먼저 손 내밀고, 신날 때도 친구 이야기를 끝까지 들어주면 최고의 친구가 돼요.',
+    care:'조심할 점: 재미에 빠져 친구 말을 끊거나 산만해질 수 있어요. "지금은 들을 시간"을 정해두면 대화가 더 즐거워져요.',
+    grow:'재미를 좇다 시작한 일을 끝까지 못 맺을 때가 있어요. "끝맺는 즐거움"을 경험하면 밝은 에너지가 멋진 결실로 이어져요. 할 일을 작게 쪼개고 하나씩 지울 때마다 스스로 칭찬해 주세요.',
+    careerWhy:'사람들과 소통하고 분위기를 밝히는 걸 좋아해서, 표현하고 사람을 만나는 직업에서 빛나요. 밝은 에너지와 공감으로 사람의 마음을 여는 힘이 강점이에요.',
+    jobs:['방송인·유튜버','가수·배우','선생님','승무원·서비스','이벤트·홍보 기획자','아나운서·MC','상담·코치'],
+    models:'유쾌한 방송인, 좋아하는 가수, 인기 선생님',
+    schoolTip:'발표·사회·응원단처럼 사람 앞에 서는 역할을 맡아보고, "한 가지 일을 끝까지 마무리하기"를 목표로 삼으면 에너지가 결과로 이어져요.',
+    guide:'많이 칭찬하고 발표·역할극 무대를 자주 주면 활짝 피어나요. 혼자 집중해야 할 땐 짝꿍과 함께하는 방식을, 끝까지 마무리하는 습관과 경청하는 태도를 함께 길러주세요.',
+    basis:'DISC의 사교형(I)·Big5 외향성과 연결돼요. 사람 속에서 에너지를 얻는 기질이 강점입니다.',
+    cheer:'나는 모두를 웃게 하는 반짝이는 병아리예요! 🐤'},
+  GREEN:{emo:'🐢',animal:'다정한 거북이',color:'초록',hex:'#00A878',role:'따뜻한 마음',
+    head:'친구를 챙기는 따뜻하고 든든한 마음! 믿음과 배려의 힘을 가졌어요.',
+    strengths:['친구의 마음을 잘 알아차리고 먼저 챙겨요','약속을 꼭 지키는 믿음직한 친구예요','동물·식물·자연을 사랑하는 따뜻함이 있어요','서두르지 않고 끝까지 꾸준히 해내요','다툰 친구들 사이를 부드럽게 화해시켜요','맡은 일을 성실하게 책임져요'],
+    interests:['반려동물·식물 돌보기','친구 도와주기·또래 상담','봉사·나눔 활동','규칙 있는 차분한 놀이','요리·정리·가꾸기','자연·생태 관찰'],
+    motiv:'누군가에게 도움을 줬을 때, 친구가 고맙다고 할 때, 편안하고 익숙한 곳에서 함께할 때 마음이 가장 따뜻하고 힘이 나요. 안정감과 신뢰 속에서 최고의 힘을 발휘해요.',
+    study:'갑자기 바뀌는 것보다 익숙하고 편안한 환경에서 집중이 잘 돼요(애착 이론의 "안전 기지"). 정해진 시간·순서로 하루 루틴을 만들고 하나씩 차근차근 익히면 실력이 꾸준히 쌓여요.',
+    studyTip:'집중 팁: 매일 같은 시간·같은 자리에서 공부하는 루틴을 만들고, 큰 과제는 작은 단계로 나눠 하나씩 완성하세요. 조급하게 다그치지 않는 편안한 분위기가 집중을 도와요.',
+    friend:'싸운 친구를 화해시키고 힘든 친구 옆을 지켜주는 반의 평화지기예요. 배려하느라 참기만 하기보다 내 마음도 조금씩 표현하면 더 건강한 관계가 돼요.',
+    care:'조심할 점: 싫은 것도 "괜찮아"라고 참을 때가 많아요. "나는 이게 불편해"라고 말하는 연습을 하면 마음이 더 편해져요.',
+    grow:'변화나 새로운 도전이 조금 무서울 수 있어요. 작은 새 시도부터 천천히 늘리면 안정감 위에 용기가 더해져요. "오늘은 딱 한 가지 새로운 것 해보기"처럼 작게 시작해 봐요.',
+    careerWhy:'사람과 생명을 돌보고 신뢰를 지키는 걸 좋아해서, 돕고 보살피는 직업에서 빛나요. 꾸준함·책임감·공감이 사람을 살리고 지키는 힘이에요.',
+    jobs:['선생님·상담사','의사·간호사','수의사','사회복지사','환경·생태 지킴이','보육·요양 전문가','물리치료사'],
+    models:'나이팅게일, 동물학자 제인 구달, 좋아하는 선생님',
+    schoolTip:'급식·화분·반려동물 돌봄 같은 꾸준한 역할을 맡아보고, "내 의견 한 가지는 꼭 말하기"를 목표로 삼으면 따뜻함에 자신감이 더해져요.',
+    guide:'재촉하지 말고 기다려주면 안정 속에서 빛나요. "네 마음이 어떤지 들어볼게" 같은 안전한 공간을 주고, 자기 의견을 말하도록 살짝 이끌어 주세요. 갑작스러운 변화는 미리 알려주면 잘 적응해요.',
+    basis:'DISC의 안정형(S)·애착 이론(안정 애착)과 연결돼요. 꾸준함과 공감이 강점의 뿌리입니다.',
+    cheer:'나는 친구를 지켜주는 따뜻한 거북이예요! 🐢'},
+  BLUE:{emo:'🦉',animal:'지혜로운 부엉이',color:'파랑',hex:'#0077B6',role:'호기심 탐험',
+    head:'"왜 그럴까?" 궁금한 게 많은 똑똑한 탐험가! 깊이 생각하는 힘이 있어요.',
+    strengths:['깊이 생각하고 이유·원리를 잘 찾아내요','새로운 것을 발견하고 알아내는 걸 좋아해요','계획을 세워 차근차근 순서대로 해내요','관찰력이 뛰어나 남이 놓친 것을 발견해요','한 가지에 푹 빠져 오래 집중해요','논리적으로 문제를 풀어내요'],
+    interests:['과학 실험·관찰','퍼즐·블록·코딩','책·다큐로 깊이 파기','수집·분류하기','기계·원리 탐구','천문·자연 관찰'],
+    motiv:'새로운 것을 알게 됐을 때, 어려운 문제를 스스로 풀었을 때, 궁금증이 해결됐을 때 가장 뿌듯하고 힘이 나요. "왜?"에 대한 답을 찾는 순간이 제일 즐거워요.',
+    study:'답을 바로 외우기보다 "왜 그런지" 스스로 찾아가는 탐구 학습이 잘 맞아요(브루너 발견학습). 조용히 집중할 공간과 충분한 시간을 주면 한 주제에 푹 빠져 몰입(플로우)하며 깊이 배워요.',
+    studyTip:'집중 팁: 배운 내용을 "질문 → 예상 → 확인" 순서로 스스로 탐구하게 하고, 방해 없는 조용한 공간과 넉넉한 시간을 보장해 주세요. 원리를 그림·표로 정리하면 이해가 오래가요.',
+    friend:'말보다 행동으로 챙기는 편이라 속마음이 깊어요. 생각을 말로도 표현하고 친구의 기분을 함께 살피면 관계가 더 넓어져요.',
+    care:'조심할 점: 혼자 생각에 빠져 친구와 멀어지거나, 옳고 그름을 따지다 차갑게 보일 수 있어요. 따뜻하게 말하는 연습을 해봐요.',
+    grow:'완벽하게 하려다 시작이 늦거나, 혼자 하는 걸 더 편해할 수 있어요. "70%면 일단 시작"과 "함께 하면 더 멀리 간다"를 익히면 강점이 더 빛나요.',
+    careerWhy:'원리를 파고들고 문제를 푸는 걸 좋아해서, 탐구하고 만드는 직업에서 빛나요. 깊은 사고력과 관찰력이 새로운 것을 발명하고 밝혀내는 힘이에요.',
+    jobs:['과학자·연구원','발명가·엔지니어','의사','프로그래머','탐정·수사관','데이터·AI 전문가','건축·설계'],
+    models:'아인슈타인, 장영실, 좋아하는 과학자·발명가',
+    schoolTip:'자유탐구·과학 프로젝트로 깊이 파고드는 경험을 하고, "친구와 함께 조사·발표하기"를 목표로 삼으면 지식에 협동심이 더해져요.',
+    guide:'질문에 성의껏 답해주고 함께 찾아보는 시간을 만들어 주세요. 조용한 몰입 공간과 충분한 시간을 보장하고, 친구와 어울리는 경험·감정을 표현하는 연습도 함께 늘려주세요.',
+    basis:'DISC의 신중형(C)·Big5 개방성(지적 호기심)과 연결돼요. 탐구심과 논리가 강점의 뿌리입니다.',
+    cheer:'나는 깊이 생각하는 지혜로운 부엉이예요! 🦉'},
+  PURPLE:{emo:'🦋',animal:'상상하는 나비',color:'보라',hex:'#9B59B6',role:'예술·창작 마법',
+    head:'그림·노래·이야기로 마음을 표현하는 예술가! 상상과 창의의 마법을 가졌어요.',
+    strengths:['상상력이 풍부하고 아이디어가 넘쳐요','나만의 색깔과 스타일로 멋지게 표현해요','아름다운 것을 느끼고 새롭게 만들어내요','마음·기분을 그림·글·몸짓으로 잘 나타내요','남과 다른 새로운 방법을 잘 떠올려요','친구의 감정에 깊이 공감해요'],
+    interests:['그림·만들기·디자인','노래·악기·춤','이야기·동화·만화 짓기','나만의 작품·스타일 꾸미기','사진·영상 만들기','상상 놀이·역할극'],
+    motiv:'내가 만든 작품이 칭찬받을 때, 마음속 상상을 마음껏 표현했을 때, 아름다운 것을 발견했을 때 가장 반짝이고 힘이 나요. 자유롭게 표현할 수 있을 때 최고의 힘을 발휘해요.',
+    study:'똑같이 외우기보다 그림·이야기·역할놀이로 바꿔 표현하며 배울 때 오래 기억해요(가드너 음악·공간 지능). 배운 걸 만화·노래·마인드맵으로 다시 만들어보면 이해가 쑥 깊어져요.',
+    studyTip:'집중 팁: 교과 내용을 그림·이야기·노래로 바꿔 표현하게 하고, 색깔·이미지를 활용한 노트를 만들면 집중과 기억이 좋아져요. 조용하고 예쁜 나만의 공부 공간도 도움이 돼요.',
+    friend:'감정이 풍부해 친구 마음에 잘 공감해요. 나와 다른 친구의 방식도 인정하면 더 넓고 깊게 사귈 수 있어요.',
+    care:'조심할 점: 기분에 따라 마음이 크게 흔들릴 수 있어요. 속상할 때 그림·글·대화로 마음을 표현하면 한결 편해져요.',
+    grow:'감정이 오르내리거나 마무리·규칙이 어려울 때가 있어요. 감정을 다스리는 법과 "마무리하는 즐거움"을 놀이처럼 익히면 창의력이 결과로 이어져요.',
+    careerWhy:'상상한 것을 표현하고 새롭게 만드는 걸 좋아해서, 창작하고 디자인하는 직업에서 빛나요. 풍부한 감성과 창의력이 세상에 없던 것을 만들어내는 힘이에요.',
+    jobs:['화가·디자이너','작가·시인','음악가·작곡가','배우·무용가','건축가','영상·웹툰 크리에이터','공예가'],
+    models:'예술가 백남준, 좋아하는 작가·가수, 애니메이션 감독',
+    schoolTip:'그림·글쓰기·공연 같은 창작 활동에 참여하고, "정해진 시간 안에 작품 완성하기"를 목표로 삼으면 상상력에 실행력이 더해져요.',
+    guide:'결과물보다 "표현하는 과정"을 인정해 주세요. 자유롭게 만들 재료와 시간을 충분히 주고, 마무리·규칙·감정 조절도 놀이처럼 익히게 도와주세요. 비교보다 "너만의 색깔"을 응원해 주세요.',
+    basis:'칼 융의 직관·Big5 개방성(심미성)과 연결돼요. 풍부한 상상과 표현이 강점의 뿌리입니다.',
+    cheer:'나는 세상을 아름답게 만드는 상상하는 나비예요! 🦋'}
+};
+
+(function buildInputs(){
+  document.getElementById('score-list').innerHTML=ORDER.map(c=>{ const d=CHILD[c];
+    return `<div class="score-row" data-c="${c}"><div class="emo">${d.emo}</div>
+      <div class="lab"><b>${d.color} · ${d.animal}</b><span>${d.role}</span></div>
+      <input id="sc-${c}" type="number" min="0" max="25" inputmode="numeric" enterkeyhint="next" placeholder="0~25"
+        oninput="onScoreInput(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();scoreNext(this);}"></div>`;}).join('');
+})();
+function scoreInputs(){ return ORDER.map(c=>document.getElementById('sc-'+c)); }
+function scoreNext(el){ const a=scoreInputs(),i=a.indexOf(el);
+  if(i>-1&&i<a.length-1){const n=a[i+1];n.focus();try{n.select();}catch(e){}} else if(i===a.length-1){el.blur();} }
+function onScoreInput(el){ let v=el.value.replace(/[^0-9]/g,'').slice(0,2); if(v!==el.value)el.value=v;
+  updateRemain(); const n=parseInt(v,10); if(v.length>=2||(v.length===1&&n>=3)) scoreNext(el); }
+function updateRemain(){ let n=0; scoreInputs().forEach(el=>{if(el.value!==''&&!isNaN(parseInt(el.value)))n++;});
+  document.getElementById('remain').textContent = n<5?`${5-n}개 색깔 점수가 남았어요 (${n}/5)`:'모두 입력 완료! 결과를 볼 수 있어요 🎉'; }
+
+let LAST=null,_star=0,_fbImg=null;
+function showResult(){
+  const scores={}; let miss=null;
+  for(const c of ORDER){ const el=document.getElementById('sc-'+c),v=parseInt(el.value,10);
+    if(el.value===''||isNaN(v)){ if(!miss)miss=el; scores[c]=0; } else scores[c]=v; }
+  if(miss){ toast('5개 색깔 점수를 모두 넣어주세요'); miss.focus(); return; }
+  const ranked=[...ORDER].sort((a,b)=>scores[b]-scores[a]), top=ranked[0], d=CHILD[top];
+  const max=Math.max(...ORDER.map(c=>scores[c]),1); LAST={scores,ranked,top};
+  const bars=ranked.map(c=>{ const s=scores[c],pct=Math.round(s/max*100);
+    return `<div class="bar"><div class="bemo">${CHILD[c].emo}</div><div class="bt">
+      <div class="n"><span>${CHILD[c].color} · ${CHILD[c].animal}</span><span>${s}점</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%;background:${CHILD[c].hex}"></div></div></div></div>`;}).join('');
+  document.getElementById('s-result').innerHTML=`
+    <div class="hero" style="background:linear-gradient(150deg,${d.hex},${shade(d.hex)})">
+      <div class="emo">${d.emo}</div><div class="kicker">나의 대표 컬러 친구</div>
+      <h2>${d.animal}</h2><div class="head">${d.head}</div></div>
+    <div class="card"><h2>🎨 나의 컬러 점수</h2>
+      <p class="sub" style="margin-bottom:8px">점수가 높은 색이 나를 가장 잘 나타내는 컬러예요. 우리는 보통 여러 색을 함께 가지고 있어요.</p>${bars}</div>
+    <div class="card">
+      <div class="sec"><h3>🌟 나의 빛나는 강점</h3><ul>${d.strengths.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+      <div class="sec"><h3>🌱 이런 것에 관심을 가져보세요</h3><div class="chips">${d.interests.map(x=>`<span>${x}</span>`).join('')}</div></div>
+      <div class="sec"><h3>😊 이럴 때 가장 힘이 나요</h3><p>${d.motiv}</p></div>
+      <div class="sec"><h3>📚 이렇게 공부하면 집중이 잘 돼요</h3><p>${d.study}</p><div class="tip">${d.studyTip}</div></div>
+      <div class="sec"><h3>🤝 친구·대인관계 잘하는 법</h3><p>${d.friend}</p><div class="care">${d.care}</div></div>
+      <div class="sec"><h3>💗 조금 더 자라면 좋은 점</h3><p>${d.grow}</p></div>
+      <div class="sec"><h3>🎯 나에게 어울리는 진로</h3><p>${d.careerWhy}</p>
+        <div class="chips job">${d.jobs.map(j=>`<span>${j}</span>`).join('')}</div>
+        <div class="models">🌟 닮은 롤모델: <b>${d.models}</b></div></div>
+      <div class="sec"><h3>🏫 학교생활·습관 팁</h3><p>${d.schoolTip}</p></div>
+      <div class="affirm">"${d.cheer}"</div>
+      <div class="guide"><b>👨‍👩‍👧 보호자·선생님께</b><p>${d.guide}</p></div>
+      <div class="basis"><b>📖 학문적 근거</b><br>${d.basis} 이 진단은 괴테 색채론·칼 융 분석심리학·막스 뤼셔 컬러심리·DISC 행동이론을 통합한 PBS 5컬러 모델을 바탕으로, 아이의 <b>강점을 중심으로</b> 해석합니다. 학습 제안은 가드너의 다중지능·브루너 발견학습·비고츠키 사회적 학습, 성장 관점은 캐럴 드웩의 성장 마인드셋을 참고했어요.</div>
+    </div>
+    <div class="card no-print">
+      <h2>💜 오늘 진단, 어땠나요?</h2>
+      <p class="sub">별점과 한 줄 소감을 남기면 결과를 예쁜 PDF로 받을 수 있어요 📄</p>
+      <div class="field"><label>⭐ 오늘 진단 별점</label>
+        <div class="stars" id="stars">${[1,2,3,4,5].map(n=>`<span data-n="${n}" onclick="setStar(${n})">★</span>`).join('')}</div></div>
+      <div class="field"><label>💬 새롭게 알게 된 점·느낀 점</label>
+        <textarea id="fb" placeholder="예: 내가 왜 그런지 알게 됐어요! OO가 특히 좋았어요 :)"></textarea></div>
+      <div class="field"><label>📷 사진 첨부 <span style="color:var(--muted);font-weight:600">(선택 · PDF에 함께 담겨요)</span></label>
+        <input type="file" accept="image/*" onchange="pickImg(this)"><div id="imgprev"></div></div>
+      <button class="btn" onclick="savePDF()">📄 소감 남기고 결과 PDF 받기</button>
+      <p class="hint">버튼을 누르면 인쇄 창이 열려요. "PDF로 저장"을 고르면 돼요.</p>
+    </div>
+    <div class="print-only" id="print-fb"></div>
+    <div class="more no-print">
+      <div class="k">👨‍👩‍👧 FOR PARENTS</div>
+      <h3>더 자세히 알고 싶다면</h3>
+      <p>우리 아이 강점을 더 깊이 알고 싶거나, 부모님·어른의 강점도 궁금하다면 아래에서 이어가 보세요.</p>
+      <!-- ▼ 링크는 확정 후 교체하세요 ▼ -->
+      <a class="p" href="https://pbscolor-6.vercel.app" target="_blank" rel="noopener">🔎 더 상세한 60문항 진단 받기</a>
+      <a class="o" href="https://pbs-child-global.vercel.app/06_부모진단.html" target="_blank" rel="noopener">🪞 부모님 진단 받기</a>
+      <a class="o" href="https://www.pbscolor.com" target="_blank" rel="noopener">🎨 최해숙 컬러강점 · 프로그램 보기</a>
+    </div>
+    <button class="btn ghost no-print" style="margin-top:14px" onclick="restart()">↺ 점수 다시 입력하기</button>
+    <div class="foot">PBS 컬러강점 어린이 · 5색 컬러 친구 진단<br>본 진단은 자기 이해를 돕는 참고 도구이며, 아이를 규정하는 라벨이 아니라 대화의 출발점으로 사용해주세요.</div>`;
+  document.getElementById('s-input').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shade(hex){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.round(r*.72);g=Math.round(g*.72);b=Math.round(b*.72);
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1); }
+function setStar(n){ _star=n; document.querySelectorAll('#stars span').forEach(s=>{s.style.color=(+s.dataset.n<=n)?'#F5A623':'#E3DFF0';}); }
+function pickImg(input){ const f=input.files&&input.files[0]; if(!f)return; const img=new Image(),rd=new FileReader();
+  rd.onload=e=>{img.onload=()=>{ const max=900; let w=img.width,h=img.height;
+    if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+    _fbImg=c.toDataURL('image/jpeg',.75); document.getElementById('imgprev').innerHTML=`<img src="${_fbImg}">`;
+  };img.src=e.target.result;}; rd.readAsDataURL(f); }
+function savePDF(){ const fb=(document.getElementById('fb').value||'').trim(), pf=document.getElementById('print-fb'), d=CHILD[LAST.top];
+  pf.innerHTML=`<div class="card"><h2>💜 나의 소감</h2>
+    <p style="font-size:13px;color:#6B6584">별점: ${'★'.repeat(_star||0)}${'☆'.repeat(5-(_star||0))}</p>
+    ${fb?`<p style="margin-top:6px;font-size:15px">${esc(fb)}</p>`:''}
+    ${_fbImg?`<img src="${_fbImg}" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px">`:''}
+    <p style="margin-top:10px;font-size:13px;color:#9A94AE">PBS 컬러강점 어린이 · 나의 컬러 친구는 ${d.emo} ${d.animal}!</p></div>`;
+  toast('결과지를 PDF로 저장해요 📄'); setTimeout(()=>window.print(),350); }
+function esc(s){ return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function restart(){ document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-input').classList.add('active');
+  scoreInputs().forEach(el=>el.value='');_star=0;_fbImg=null;updateRemain();
+  window.scrollTo({top:0,behavior:'smooth'}); }
+let _tt; function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('on'),2200); }
+</script>
+</body>
+</html>
